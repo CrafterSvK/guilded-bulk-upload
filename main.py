@@ -23,6 +23,7 @@ async def upload_files(filename: str):
             data = await response.json()
 
             try:
+                print(f'Uploaded: {filename}')
                 return data['url']
             except KeyError:
                 if response.status == 429:
@@ -37,13 +38,13 @@ async def add_emojis_to_team(emojis, team_id: str, session: aiohttp.ClientSessio
     response = await session.post(f'{API}/teams/{team_id}/bulkCustomReactions', json=dict(urls=emojis))
 
     if response.status == 200:
-        print('success')
+        print(f'Successfully added all emotes to server with id: {team_id}')
     else:
         print(await response.json())
 
 
 async def login(email: str, password: str, session: aiohttp.ClientSession):
-    response = await session.post(f'{API}/login', json={
+    await session.post(f'{API}/login', json={
         'email': email,
         'password': password
     })
